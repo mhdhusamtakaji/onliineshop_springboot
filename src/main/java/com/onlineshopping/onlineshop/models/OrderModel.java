@@ -13,7 +13,7 @@ public class OrderModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	 @ManyToMany
+	 @ManyToMany(fetch = FetchType.EAGER)
 	    @JoinTable(
 	        name = "order_product",
 	        joinColumns = @JoinColumn(name = "order_id"),
