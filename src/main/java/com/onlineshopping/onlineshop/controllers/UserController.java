@@ -3,8 +3,10 @@ package com.onlineshopping.onlineshop.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onlineshopping.onlineshop.PasswordEncoder;
@@ -13,10 +15,9 @@ import com.onlineshopping.onlineshop.services.UserRepo;
 
 @RestController
 public class UserController {
-    
     @Autowired
      UserRepo userRepo;
-
+    
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserModel user) {
         if (userRepo.findByUsername(user.getUsername()) != null) {
@@ -39,7 +40,7 @@ public class UserController {
         String token = PasswordEncoder.generateToken(user.getUsername());
         existingUser.setToken(token);
         userRepo.save(existingUser);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged in");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(existingUser);
     }
 
     @PostMapping("/logout")
@@ -50,4 +51,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out");
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<?> getAuthenticatedUser(@RequestHeader("Authorization") String authorizationHeader) {
+        // Check if Authorization header is present
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
+        }
+        // Extract token from Authorization header
+        String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
+
+        // Retrieve user from database using token
+        UserModel authenticatedUser = userRepo.findByToken(token);
+        if (authenticatedUser != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(authenticatedUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+    }
 }

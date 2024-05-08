@@ -22,6 +22,9 @@ public class UserModel {
     @Nullable
     private String token;
 
+    @Nullable
+    private boolean isAdmin;
+
     public UserModel() {
     }
 
@@ -58,5 +61,17 @@ public class UserModel {
         this.token = token;
     }
 
-    
+    @PrePersist
+    public void setDefaults() {
+        this.isAdmin = false;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
 }

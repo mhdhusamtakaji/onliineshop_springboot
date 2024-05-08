@@ -6,4 +6,5 @@ import com.onlineshopping.onlineshop.models.UserModel;
 
 public interface UserRepo extends JpaRepository<UserModel, Integer>{
     UserModel findByUsername(String username);
+    UserModel findByToken(String token);
 }
