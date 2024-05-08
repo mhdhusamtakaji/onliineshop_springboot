@@ -21,8 +21,8 @@ public class ProductModel {
 	private Double price;
 	private String description;
 	
-	//  @ManyToMany(mappedBy = "products")
-	//     private List<OrderModel> orders;
+	 @ManyToMany(mappedBy = "products")
+	    private List<OrderModel> orders;
 	
 	// Default Constructor
 	public ProductModel() {}
