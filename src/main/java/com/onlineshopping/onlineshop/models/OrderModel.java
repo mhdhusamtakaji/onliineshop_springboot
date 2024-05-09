@@ -25,7 +25,10 @@ public class OrderModel {
 	private Double total;
 	 @Column(name = "date")
 	private LocalDate date;
-	 
+
+	@ManyToOne(fetch = FetchType.EAGER) 
+    @JoinColumn(name = "user_id", referencedColumnName = "id") 
+    private UserModel user;
 	 
 	 
 	public OrderModel() {}
@@ -62,6 +65,10 @@ public class OrderModel {
 	public int getId() {
 		return id;
 	}
+	public void setUser(UserModel user) {
+		this.user = user;
+	}
+
 	 
 	 
 }

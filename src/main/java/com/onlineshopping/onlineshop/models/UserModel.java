@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.*;
 @Entity
 @Table(name = "users")
 public class UserModel {
@@ -24,6 +25,9 @@ public class UserModel {
 
     @Nullable
     private boolean isAdmin;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrderModel> orders;
 
     public UserModel() {
     }
@@ -72,6 +76,14 @@ public class UserModel {
 
     public boolean getIsAdmin() {
         return isAdmin;
+    }
+
+    public List<OrderModel> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderModel> orders) {
+        this.orders = orders;
     }
 
 }
