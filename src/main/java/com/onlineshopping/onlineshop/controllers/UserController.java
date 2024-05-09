@@ -57,12 +57,16 @@ public class UserController {
             redirectAttributes.addFlashAttribute("error", "Invalid username or password. Please try again.");
             return "redirect:/login"; // Redirect back to login page with error message
         }
-        // set token to session after login
-        final String token = PasswordEncoder.generateToken(username);
+        
+        // set user to session after login
         HttpSession session = request.getSession();
-        session.setAttribute("token", token);
-        return "redirect:/profile";
+        session.setAttribute("user", user);
+        return "redirect:/products";
     }
+
+
+
+
 
 
     // Render mapping for profile page
